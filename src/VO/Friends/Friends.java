@@ -1,9 +1,10 @@
 package VO.Friends;
 
-import java.io.File;
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 class Friends {
 	String name;
@@ -16,20 +17,24 @@ class Friends {
 	}
 
 	public static void main(String[] args) throws IOException {
+		BufferedWriter bw = new BufferedWriter(new FileWriter("friends.txt"));
 		Friends fr = new Friends("김채아", "8월3일");
-		Friends fr2 = new Friends("이묘찬", "9월3");
+		Friends fr2 = new Friends("이묘찬", "9월3일");
 		String fileName = "\test.txt";	
 		HashMap<String, Friends> map = new HashMap();
-		String[] strArr = new String[map.size()];
+//		String[] strArr = new String[map.size()];
+		String str = "";
 	
 		map.put(fr.name, fr);
 		map.put(fr2.name, fr2);
 		
-		System.out.println(fr.toString());
+		for (Entry<String, Friends> entry : map.entrySet()) {
+			String key = entry.getKey();
+			Friends value = entry.getValue();
+			bw.write(value + "\n");
+			bw.flush();
+		}
 		
-//		FileWriter fw = new FileWriter(new File(fileName), true);
-		System.out.println(map.keySet());
-		System.out.println(map.entrySet());
 	
 			
 		
@@ -37,7 +42,7 @@ class Friends {
 
 	@Override
 	public String toString() {
-		return "Friends [name=" + name + ", birthDay=" + birthDay + "]";
+		return "[name: " + name + ", birthDay: " + birthDay + "]";
 	}
 }
 

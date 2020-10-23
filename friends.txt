@@ -1,0 +1,2 @@
+[name: 김채아, birthDay: 8월3일]
+[name: 이묘찬, birthDay: 9월3일]
