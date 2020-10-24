@@ -12,6 +12,7 @@ public class Animal {
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader("hash_test.txt"));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		HashMap<String, Integer> map = new HashMap();
 		String line = "";
 		int value = 0;
@@ -29,10 +30,12 @@ public class Animal {
 		}
 		
 		for (Entry<String, Integer> entry : map.entrySet()) {
-			System.out.println(entry.getKey() + " : " + entry.getValue());
+			bw.write(entry.getKey() + " : " + entry.getValue() + "\n");
 			
 		}
-		System.out.println("[결과 : 총 " + map.size() + " 가지의 동물이 있습니다.]");
+		bw.write("[결과 : 총 " + map.size() + " 가지의 동물이 있습니다.]");
+		bw.flush();
+		bw.close();
 		
 	}
 
