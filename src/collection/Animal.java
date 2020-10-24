@@ -17,6 +17,7 @@ public class Animal {
 		String line = "";
 		int value = 0;
 		int newValue = 0;
+		int howManyAnimal = 0;
 		
 		while((line = br.readLine()) != null) {
 			String[] strArr = line.split("\\|");
@@ -31,9 +32,9 @@ public class Animal {
 		
 		for (Entry<String, Integer> entry : map.entrySet()) {
 			bw.write(entry.getKey() + " : " + entry.getValue() + "\n");
-			
+			howManyAnimal += entry.getValue();
 		}
-		bw.write("[결과 : 총 " + map.size() + " 가지의 동물이 있습니다.]");
+		bw.write("[결과 : 총 " + howManyAnimal + "마리, " + map.size() + "가지의 동물이 있습니다.]");
 		bw.flush();
 		bw.close();
 		
