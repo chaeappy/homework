@@ -1,5 +1,7 @@
-package collection;
-
+package haspMap;
+// 동물리스트 txt파일을 읽어와서 정리하는 문제
+// 중복 키의 밸류값은 더하여 해쉬맵에 추가
+// 해쉬맵의 중복키 값, 덮어씌우는 점을 활용 --> 중복키 정리할 필요x
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
