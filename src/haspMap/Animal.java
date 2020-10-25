@@ -7,15 +7,15 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 public class Animal {
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader("hash_test.txt"));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		HashMap<String, Integer> map = new HashMap();
+		TreeMap<String, Integer> map = new TreeMap();
 		String line = "";
 		int value = 0;
 		int newValue = 0;
