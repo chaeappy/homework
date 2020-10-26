@@ -7,20 +7,22 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
 public class Animal {
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader("hash_test.txt"));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		TreeMap<String, Integer> map = new TreeMap();
+		Map<String, Integer> map = new HashMap();
 		String line = "";
 		int value = 0;
 		int newValue = 0;
 		int howManyAnimal = 0;
-		
 		while((line = br.readLine()) != null) {
 			String[] strArr = line.split("\\|");
 			if (map.containsKey(strArr[0])) {
@@ -31,8 +33,10 @@ public class Animal {
 				map.put(strArr[0], Integer.parseInt(strArr[1]));
 			}
 		}
+		List<Entry<String, Integer>> list = new ArrayList<>(map.entrySet());
+		list.sort(Entry.comparingByValue());
 		
-		for (Entry<String, Integer> entry : map.entrySet()) {
+		for (Entry<String, Integer> entry : list) {
 			bw.write(entry.getKey() + " : " + entry.getValue() + "\n");
 			howManyAnimal += entry.getValue();
 		}
