@@ -5,25 +5,24 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 class Person {
-	String name;
 	String id;
+	String name;
 	int bankBalance;
 
-	public Person(String name, String id) {
-		this.name = name;
+	public Person(String id, String name) {
 		this.id = id;
+		this.name = name;
 		bankBalance = 0;
 	}
 
 	@Override
 	public String toString() {
-		return name + ", " + id + ", " + bankBalance;
+		return id + ", " + name + ", " + bankBalance;
 	}
 }
 
@@ -32,18 +31,18 @@ public class Bank {
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	HashMap<String, Person> userMap = new HashMap<>();
 	String[] personArr = null;
-	String line = "-----------------------------------";
+	String line = "============================";
 
 	void user() throws IOException {
 		System.out.println("1. 등록 / 2. 삭제");
 
 		if (sc.nextInt() == 1) {
-			System.out.println("이름과 아이디를 입력하세요. ex) 이름 / 아이디");
+			System.out.println("사용할 아이디와 이름을 입력하세요. ex) 아이디 / 이름");
 			String str = br.readLine();
 			String[] userArr = str.split("/");
 			userMap.put(userArr[0], new Person(userArr[0], userArr[1]));
 		} else {
-			System.out.println("삭제할 이름을 입력하세요.");
+			System.out.println("삭제할 아이디 입력하세요.");
 			userMap.remove(br.readLine());
 			System.out.println(userMap.size());
 		}
@@ -53,12 +52,17 @@ public class Bank {
 	void login() throws IOException {
 		System.out.println("아이디를 입력하세요");
 		String idGet = br.readLine();
+		System.out.println(idGet);
 		Loop1: for (Map.Entry<String, Person> entry : userMap.entrySet()) {
-			String getValue = entry.getValue() + "";
-			personArr = getValue.split(",");
-			String secret[] = personArr[0].split("");
-			System.out.println(secret[0] + "*" + secret[2] + "님 환영합니다.");
+			String getKey = entry.getKey() + "";
+			System.out.println(getKey == idGet);
+			if (getKey == idGet) {
+				personArr = (userMap.get(idGet) + "").split(",");
+				break Loop1;
+			} 
 		}
+		String secret[] = personArr[1].split("");
+		System.out.println(secret[0] + "*" + secret[2] + "님 환영합니다.");
 		function();
 	}
 
