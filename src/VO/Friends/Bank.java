@@ -2,6 +2,8 @@ package VO.Friends;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,7 +16,8 @@ import java.util.Scanner;
 public class Bank {
 	Scanner sc = new Scanner(System.in);
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	HashMap<String, Person> userMap = new HashMap<>();
+	BufferedWriter bw ;
+	static HashMap<String, Person> userMap = new HashMap<>();
 	String[] personArr = null;
 	String line = "============================";
 
@@ -25,7 +28,9 @@ public class Bank {
 			System.out.println("사용할 아이디와 이름을 입력하세요. ex) 아이디 / 이름");
 			String str = br.readLine().trim().replace(" ", "");
 			String[] userArr = str.split("/");
-			userMap.put(userArr[0], new Person(userArr[0], userArr[1]));
+			if (!userMap.containsKey(userArr[0])) {
+				userMap.put(userArr[0], new Person(userArr[0], userArr[1], 0));
+			}
 		} else {
 			System.out.println("삭제할 아이디 입력하세요.");
 			userMap.remove(br.readLine());
@@ -97,16 +102,27 @@ public class Bank {
 				System.out.println(personArr[0] + "님의 계좌 총 금액 : " + userMap.get(personArr[0]).getBankBalance());
 				break;
 			case 0:
-				
+				bw = new BufferedWriter(new FileWriter("back.txt"));
 				break;
 			}
 		} while (input != 0);
 	}
 
 	public static void main(String[] args) throws IOException {
-		BufferedWriter bw = new BufferedWriter(new FileWriter("back.txt"));
-		Bank bk = new Bank();
 		int input;
+		Bank bk = new Bank();
+		File file = new File("/Users/chaea/Desktop/workspace/homework/Customer.txt");
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		BufferedReader brForFile = new BufferedReader(new FileReader(file));
+		while (brForFile != null) {
+			String brLine = "";
+			brLine = brLine.trim().replace(" ", "");
+			String[] userArr = brLine.split(",");
+			userMap.put(userArr[0], new Person(userArr[0], userArr[1], Integer.parseInt(userArr[2])));
+		}
+		
 		System.out.println("- - - - Bank Program - - - -");
 		do {
 			System.out.println(bk.line);

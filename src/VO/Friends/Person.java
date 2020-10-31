@@ -5,10 +5,10 @@ class Person {
 	String name;
 	int bankBalance;
 
-	public Person(String id, String name) {
+	public Person(String id, String name, int bankBalance) {
 		this.id = id;
 		this.name = name;
-		bankBalance = 0;
+		this.bankBalance = bankBalance;
 	}
 
 	public String getId() {
