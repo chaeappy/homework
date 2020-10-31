@@ -11,32 +11,39 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-
-
 public class Bank {
-	Scanner sc = new Scanner(System.in);
+	static Scanner sc = new Scanner(System.in);
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	BufferedWriter bw ;
+	
 	static HashMap<String, Person> userMap = new HashMap<>();
 	String[] personArr = null;
-	String line = "============================";
+	static String line = "============================";
 
 	void user() throws IOException {
 		System.out.println("1. 등록 / 2. 삭제");
-
-		if (sc.nextInt() == 1) {
-			System.out.println("사용할 아이디와 이름을 입력하세요. ex) 아이디 / 이름");
-			String str = br.readLine().trim().replace(" ", "");
-			String[] userArr = str.split("/");
-			if (!userMap.containsKey(userArr[0])) {
-				userMap.put(userArr[0], new Person(userArr[0], userArr[1], 0));
+		int input = sc.nextInt();
+		String[] userArr;
+		switch (input) {
+		case 1:
+			while (true) {
+				System.out.println(line);
+				System.out.println("사용할 아이디와 이름을 입력하세요. ex) 아이디 / 이름");
+				String str = br.readLine().trim().replace(" ", "");
+				userArr = str.split("/");
+				if (!userMap.containsKey(userArr[0])) {
+					break;
+				} else {
+					System.out.println("사용할 수 없는 아이디입니다.");
+				}
 			}
-		} else {
+			userMap.put(userArr[0], new Person(userArr[0], userArr[1], 0));
+			break;
+		case 2:
 			System.out.println("삭제할 아이디 입력하세요.");
 			userMap.remove(br.readLine());
 			System.out.println(userMap.size());
+			break;
 		}
-
 	}
 
 	void login() throws IOException {
@@ -48,7 +55,7 @@ public class Bank {
 				personArr = (userMap.get(idGet) + "").replace(" ", "").split(",");
 				System.out.println();
 				break Loop1;
-			} 
+			}
 		}
 		String secret[] = personArr[1].split("");
 		System.out.println(secret[0] + "*" + secret[2] + "님 환영합니다.");
@@ -57,7 +64,7 @@ public class Bank {
 
 	void function() throws IOException {
 		int input;
-		
+
 		do {
 			System.out.println(line);
 			System.out.println("[ 1 ] 입금");
@@ -88,12 +95,12 @@ public class Bank {
 			case 3:
 				System.out.println("이체가능 금액 : " + userMap.get(personArr[0]).getBankBalance());
 				System.out.println("이체할 대상의 아이디와 금액을 입력하세요 ex) 아이디 / 금액(숫자)");
-				String[] sendArr = br.readLine().trim().replace(" ", "").split("/"); 
+				String[] sendArr = br.readLine().trim().replace(" ", "").split("/");
 				if (Integer.parseInt(sendArr[1]) <= userMap.get(personArr[0]).getBankBalance()) {
-				userMap.get(personArr[0]).setBankBalance(Integer.parseInt(sendArr[1]) * -1);
-				userMap.get(sendArr[0]).setBankBalance(Integer.parseInt(sendArr[1]));
-				System.out.println("정상적으로 이체되었습니다.");
-				System.out.println("이체 후 잔액 : " + userMap.get(personArr[0]).getBankBalance());
+					userMap.get(personArr[0]).setBankBalance(Integer.parseInt(sendArr[1]) * -1);
+					userMap.get(sendArr[0]).setBankBalance(Integer.parseInt(sendArr[1]));
+					System.out.println("정상적으로 이체되었습니다.");
+					System.out.println("이체 후 잔액 : " + userMap.get(personArr[0]).getBankBalance());
 				} else {
 					System.out.println("잔액이 부족합니다.");
 				}
@@ -102,7 +109,6 @@ public class Bank {
 				System.out.println(personArr[0] + "님의 계좌 총 금액 : " + userMap.get(personArr[0]).getBankBalance());
 				break;
 			case 0:
-				bw = new BufferedWriter(new FileWriter("back.txt"));
 				break;
 			}
 		} while (input != 0);
@@ -111,25 +117,28 @@ public class Bank {
 	public static void main(String[] args) throws IOException {
 		int input;
 		Bank bk = new Bank();
-		File file = new File("/Users/chaea/Desktop/workspace/homework/Customer.txt");
+		File file = new File("/Users/chaea/Desktop/workspace/homework/bankCustomer.txt");
+		BufferedWriter bw = null;
+		BufferedReader brForFile;
 		if (!file.exists()) {
 			file.createNewFile();
+		} 
+		if (file.exists() && file != null) {
+			brForFile = new BufferedReader(new FileReader(file));
+			bw = new BufferedWriter(new FileWriter("bankCustomer.txt"));
+			while (brForFile.readLine() != null) {
+				String[] userArr = brForFile.readLine().trim().replace(" ", "").split(",");
+				userMap.put(userArr[0], new Person(userArr[0], userArr[1], Integer.parseInt(userArr[2])));
+			}
 		}
-		BufferedReader brForFile = new BufferedReader(new FileReader(file));
-		while (brForFile != null) {
-			String brLine = "";
-			brLine = brLine.trim().replace(" ", "");
-			String[] userArr = brLine.split(",");
-			userMap.put(userArr[0], new Person(userArr[0], userArr[1], Integer.parseInt(userArr[2])));
-		}
-		
+
 		System.out.println("- - - - Bank Program - - - -");
 		do {
-			System.out.println(bk.line);
+			System.out.println(line);
 			System.out.println("[ 1 ] 사용자 등록 / 삭제");
 			System.out.println("[ 2 ] 로그인");
 			System.out.println("[ 0 ] 프로그램 종료");
-			input = bk.sc.nextInt();
+			input = sc.nextInt();
 
 			switch (input) {
 			// 사용자 등록/삭제
@@ -138,21 +147,28 @@ public class Bank {
 				break;
 			// 사용자 로그인 로그아웃 : 해쉬맵
 			case 2:
-				if (bk.userMap.size() != 0) {
+				if (userMap.size() != 0) {
 					bk.login();
-				} else if (bk.userMap.size() == 0) {
-					System.out.println(bk.line);
+				} else if (userMap.size() == 0) {
+					System.out.println(line);
 					System.out.println("사용자 등록후 로그인하시기 바랍니다");
-					System.out.println(bk.line);
+					System.out.println(line);
 				}
 				break;
 			case 0:
 				System.out.println("이용해주셔서 감사합니다.");
+				
+				for (Map.Entry<String, Person> entry : userMap.entrySet()) {
+					Person values = entry.getValue();
+					System.out.println(values);
+					bw.write(values + "\n");
+				}
+				bw.flush();
 				break;
 			default:
-				System.out.println(bk.line);
+				System.out.println(line);
 				System.out.println("다시 입력하시기 바랍니다.");
-				System.out.println(bk.line);
+				System.out.println(line);
 				break;
 			}
 		} while (input != 0);
