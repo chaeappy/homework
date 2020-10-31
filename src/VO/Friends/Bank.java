@@ -12,12 +12,13 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Bank {
-	static Scanner sc = new Scanner(System.in);
+	Scanner sc = new Scanner(System.in);
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	
-	static HashMap<String, Person> userMap = new HashMap<>();
+	BufferedWriter bw = null;
+	static final File file = new File("bankCustomer.txt");
+	HashMap<String, Person> userMap = new HashMap<>();
 	String[] personArr = null;
-	static String line = "============================";
+	static final String line = "============================";
 
 	void user() throws IOException {
 		System.out.println("1. 등록 / 2. 삭제");
@@ -31,17 +32,30 @@ public class Bank {
 				String str = br.readLine().trim().replace(" ", "");
 				userArr = str.split("/");
 				if (!userMap.containsKey(userArr[0])) {
+					userMap.put(userArr[0], new Person(userArr[0], userArr[1], 0));
+					bw = new BufferedWriter(new FileWriter(file));
+					for (Map.Entry<String, Person> entry : userMap.entrySet()) {
+						Person values = entry.getValue();
+						bw.write(values + "\n");
+					}
+					bw.flush();
+					bw.close();
 					break;
 				} else {
 					System.out.println("사용할 수 없는 아이디입니다.");
 				}
 			}
-			userMap.put(userArr[0], new Person(userArr[0], userArr[1], 0));
 			break;
 		case 2:
 			System.out.println("삭제할 아이디 입력하세요.");
 			userMap.remove(br.readLine());
-			System.out.println(userMap.size());
+			bw = new BufferedWriter(new FileWriter(file));
+			for (Map.Entry<String, Person> entry : userMap.entrySet()) {
+				Person values = entry.getValue();
+				bw.write(values + "\n");
+			}
+			bw.flush();
+			bw.close();
 			break;
 		}
 	}
@@ -58,7 +72,16 @@ public class Bank {
 			}
 		}
 		String secret[] = personArr[1].split("");
-		System.out.println(secret[0] + "*" + secret[2] + "님 환영합니다.");
+		if (secret.length == 3) {
+			System.out.println(secret[0] + "*" + secret[2] + "님 환영합니다.");
+		} else {
+			String star = "*";
+			for (int i = 0; i < secret.length - 2; i++) {
+				star += "*";
+			}
+
+			System.out.println(secret[0] + star + "님 환영합니다.");
+		}
 		function();
 	}
 
@@ -80,14 +103,28 @@ public class Bank {
 				int saveMoney = sc.nextInt();
 				userMap.get(personArr[0]).setBankBalance(saveMoney);
 				System.out.println("입금 후 총 금액 : " + userMap.get(personArr[0]).getBankBalance());
+				bw = new BufferedWriter(new FileWriter(file));
+				for (Map.Entry<String, Person> entry : userMap.entrySet()) {
+					Person values = entry.getValue();
+					bw.write(values + "\n");
+				}
+				bw.flush();
+				bw.close();
 				break;
 			case 2:
 				System.out.println("출금가능 금액 : " + userMap.get(personArr[0]).getBankBalance());
 				System.out.println("출금할 금액을 입력하세요");
-				int spendMoney = sc.nextInt() * -1;
+				int spendMoney = sc.nextInt();
 				if (spendMoney <= userMap.get(personArr[0]).getBankBalance()) {
-					userMap.get(personArr[0]).setBankBalance(spendMoney);
+					userMap.get(personArr[0]).setBankBalance(spendMoney * -1);
 					System.out.println("출금 후 잔액 : " + userMap.get(personArr[0]).getBankBalance());
+					bw = new BufferedWriter(new FileWriter(file));
+					for (Map.Entry<String, Person> entry : userMap.entrySet()) {
+						Person values = entry.getValue();
+						bw.write(values + "\n");
+					}
+					bw.flush();
+					bw.close();
 				} else {
 					System.out.println("잔액이 부족합니다.");
 				}
@@ -101,6 +138,13 @@ public class Bank {
 					userMap.get(sendArr[0]).setBankBalance(Integer.parseInt(sendArr[1]));
 					System.out.println("정상적으로 이체되었습니다.");
 					System.out.println("이체 후 잔액 : " + userMap.get(personArr[0]).getBankBalance());
+					bw = new BufferedWriter(new FileWriter(file));
+					for (Map.Entry<String, Person> entry : userMap.entrySet()) {
+						Person values = entry.getValue();
+						bw.write(values + "\n");
+					}
+					bw.flush();
+					bw.close();
 				} else {
 					System.out.println("잔액이 부족합니다.");
 				}
@@ -116,20 +160,21 @@ public class Bank {
 
 	public static void main(String[] args) throws IOException {
 		int input;
+		String msg;
 		Bank bk = new Bank();
-		File file = new File("/Users/chaea/Desktop/workspace/homework/bankCustomer.txt");
-		BufferedWriter bw = null;
+
 		BufferedReader brForFile;
-		if (!file.exists()) {
-			file.createNewFile();
-		} 
-		if (file.exists() && file != null) {
+
+		String[] userArr;
+
+		if (file.exists()) {
 			brForFile = new BufferedReader(new FileReader(file));
-			bw = new BufferedWriter(new FileWriter("bankCustomer.txt"));
-			while (brForFile.readLine() != null) {
-				String[] userArr = brForFile.readLine().trim().replace(" ", "").split(",");
-				userMap.put(userArr[0], new Person(userArr[0], userArr[1], Integer.parseInt(userArr[2])));
+			while ((msg = brForFile.readLine()) != null) {
+				userArr = msg.replace(" ", "").split(",");
+				bk.userMap.put(userArr[0], new Person(userArr[0], userArr[1], Integer.parseInt(userArr[2])));
 			}
+		} else if (!file.exists()) {
+			file.createNewFile();
 		}
 
 		System.out.println("- - - - Bank Program - - - -");
@@ -138,7 +183,7 @@ public class Bank {
 			System.out.println("[ 1 ] 사용자 등록 / 삭제");
 			System.out.println("[ 2 ] 로그인");
 			System.out.println("[ 0 ] 프로그램 종료");
-			input = sc.nextInt();
+			input = bk.sc.nextInt();
 
 			switch (input) {
 			// 사용자 등록/삭제
@@ -147,9 +192,9 @@ public class Bank {
 				break;
 			// 사용자 로그인 로그아웃 : 해쉬맵
 			case 2:
-				if (userMap.size() != 0) {
+				if (bk.userMap.size() != 0) {
 					bk.login();
-				} else if (userMap.size() == 0) {
+				} else if (bk.userMap.size() == 0) {
 					System.out.println(line);
 					System.out.println("사용자 등록후 로그인하시기 바랍니다");
 					System.out.println(line);
@@ -157,13 +202,13 @@ public class Bank {
 				break;
 			case 0:
 				System.out.println("이용해주셔서 감사합니다.");
-				
-				for (Map.Entry<String, Person> entry : userMap.entrySet()) {
+				bk.bw = new BufferedWriter(new FileWriter(file));
+				for (Map.Entry<String, Person> entry : bk.userMap.entrySet()) {
 					Person values = entry.getValue();
-					System.out.println(values);
-					bw.write(values + "\n");
+					bk.bw.write(values + "\n");
 				}
-				bw.flush();
+				bk.bw.flush();
+				bk.bw.close();
 				break;
 			default:
 				System.out.println(line);
