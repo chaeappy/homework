@@ -1,4 +1,4 @@
-package VO.Friends;
+package vo.friends;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

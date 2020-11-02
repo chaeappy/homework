@@ -1,4 +1,4 @@
-package VO.Friends;
+package vo.friends;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

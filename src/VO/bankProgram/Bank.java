@@ -1,4 +1,4 @@
-package VO.Friends;
+package vo.bankProgram;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

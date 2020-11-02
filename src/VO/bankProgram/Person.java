@@ -1,4 +1,4 @@
-package VO.Friends;
+package vo.bankProgram;
 
 class Person {
 	String id;
