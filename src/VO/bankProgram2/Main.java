@@ -9,6 +9,7 @@ public class Main {
 	String enter = "\n";
 
 	void run() {
+		m.load();
 		while (true) {
 			int input = showMainMsg();
 			switch (input) {
@@ -20,19 +21,19 @@ public class Main {
 				} else if (number == 2) {
 					signOff();
 				}
+				m.save();
 				break;
 			// 로그인
 			case 2:
-				Customer c = logIn();
-				if (c != null) {
-					work(c);
-				}
+				logIn();
 				break;
 			case 3:
 				// 종료
-				break;
+				System.out.println("프로그램 종료");
+				return;
 
 			default:
+				errorMsg();
 				break;
 			}
 		}
@@ -63,8 +64,7 @@ public class Main {
 		if (m.signUp(id)) {
 			System.out.println(id + " 회원가입 성공");
 		} else {
-			System.out.println("회원가입 실패");
-			return;
+			errorMsg();
 		}
 	}
 
@@ -75,24 +75,25 @@ public class Main {
 		Customer c = m.signOff(id);
 		if (c != null) {
 			System.out.println(id + " 회원탈퇴");
+			m.save();
 		} else {
-			System.out.println("회원탈퇴 실패");
-			return;
+			errorMsg();
 		}
 	}
 
 	// 로그인
-	Customer logIn() {
+	void logIn() {
 		System.out.print("아이디 : ");
 		sc.nextLine();
 		String id = sc.nextLine();
 		Customer c = m.logIn(id);
 		if (c != null) {
 			System.out.println(id + "님 환영합니다");
+			work(c);
 		} else {
-			System.out.println("로그인 실패");
+			errorMsg();
 		}
-		return c;
+			return;
 
 	}
 	
@@ -100,6 +101,7 @@ public class Main {
 		System.out.print("입금할 금액 : ");
 		int money = sc.nextInt();
 		c.saveMoney(money);
+		
 	}
 	
 	void spendMoney(Customer c) {
@@ -142,38 +144,36 @@ public class Main {
 			// 입금
 			case 1:
 				saveMoney(c);
+				m.save();
 				break;
 			// 출금
 			case 2:
 				spendMoney(c);
+				m.save();
 				break;	
 			// 이체
 			case 3:
 				sendMoney(c);
+				m.save();
 				break;
 			// 잔액조회
 			case 4:
 				System.out.println(c.money);
 				break;
-			// 종료
+			// 로그아웃
 			case 5:
-
-				break;
-
+				return;
 			default:
+				errorMsg();
 				break;
 			}
 		}
 	}
 
-	// 입금
-	// 출금
-	// 이체
-	// 잔액조회
 
-	// 프로그램종료
-	void exit() {
-
+	// 에러메세지
+	void errorMsg() {
+		System.out.println("다시 입력하세요.");
 	}
 
 	public static void main(String[] args) {

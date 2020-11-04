@@ -21,5 +21,9 @@ public class Customer {
 		c.spendMoney(money);
 		other.saveMoney(money);
 	}
+	@Override
+	public String toString() {
+		return id + ", " + money;
+	}
 	
 }
