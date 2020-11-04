@@ -17,8 +17,9 @@ public class Customer {
 		this.money -= money;
 	}
 	// 이체 
-	void sendMoney() {
-		
+	void sendMoney(Customer c, Customer other, int money) {
+		c.spendMoney(money);
+		other.saveMoney(money);
 	}
 	
 }

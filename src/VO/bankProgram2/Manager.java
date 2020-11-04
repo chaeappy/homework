@@ -1,9 +1,13 @@
 package vo.bankProgram2;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 
 public class Manager {
 	HashMap<String, Customer> map = new HashMap<>();
+	
 	// 해쉬맵
 	
 	// 회원가입
@@ -25,4 +29,20 @@ public class Manager {
 	Customer logIn(String id) {
 			return map.get(id);
 	}
+	
+	// 이체
+	Customer sendMoney(String other) {
+			return map.get(other);
+	}
+	
+	void save() {
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter("bankCustomer.txt"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
 }
