@@ -64,7 +64,7 @@ public class Manager {
 				
 				BufferedReader br = new BufferedReader(new FileReader(file));
 				while ((str = br.readLine()) != null) {
-					str.replace(" ", "");
+					str = str.replace(" ", "");
 					String strArr[] = str.split(",");
 					String id = strArr[0];
 					int money = Integer.parseInt(strArr[1]);
