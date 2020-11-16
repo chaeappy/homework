@@ -87,6 +87,7 @@ public class Barista {
 				// 영수증재발행
 				break;
 			case 4:
+				// 프로그램 종료
 				break;
 			case 0:
 				break;
@@ -125,7 +126,7 @@ public class Barista {
 				break;
 			// 결제
 			case 4:
-				pay();
+				pay(c);
 				break;
 
 			default:
@@ -165,33 +166,33 @@ public class Barista {
 	}
 
 	
-	void pay() {
-		int input = payMsg();
-		switch (input) {
-		case 1:
+	void pay(Customer c) {
+		boolean cash = payMsg();
+		if (cash) {
 			String phoneNum = cashMsg();
-			
+			String str = "현금";
 			if (phoneNum != null) {
-				p.pay(phoneNum, receipt());
+				p.pay(c, str, phoneNum, receipt());
 			} else {
-				p.pay(receipt());
+				p.pay(c, str, receipt());
 			}
-			break;
-		case 2:
+		} else {
+			String str = "카드";
 			card();
-			p.pay(receipt());
-			break;
-
-		default:
-			break;
+			p.pay(c, str, receipt());
 		}
 		
 	}
 	
-	int payMsg() {
+	boolean payMsg() {
 		System.out.println("1. 현금결제");
 		System.out.println("2. 카드결제");
-		return sc.nextInt();
+		int input = sc.nextInt();
+		if (input == 1) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	String cashMsg() {

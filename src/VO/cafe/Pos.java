@@ -3,14 +3,15 @@ package vo.cafe;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 public class Pos {
 	DrinkDatabase ddb = new DrinkDatabase();
 	HashMap<Drink, Integer> inputMap = new HashMap<Drink, Integer>();
-//	HashMap<Integer, Integer> inputMap = new HashMap<Integer, Integer>();
-
+	HashMap<Date, Payment> paymentMap = new HashMap<Date, Payment>();
+	Date date = new Date(System.currentTimeMillis());
 	// 메뉴보기
 	public void menuMsg() {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -72,12 +73,22 @@ public class Pos {
 	
 	
 	
-	public void pay(String phoneNum, boolean receipt) {
-		
+	public void pay(Customer c, String str, String phoneNum, boolean receipt) {
+		if (receipt) {
+			System.out.println(new Receipt(date, inputMap, sum(), str, phoneNum));
+		} else {
+			Receipt r = new Receipt(date, inputMap, sum(), str, phoneNum);
+			paymentMap.put(date, new Payment(date, r));
+		}
 	}
-		
-	public void pay(boolean receipt) {
-		
+	
+	public void pay(Customer c, String str, boolean receipt) {
+		if (receipt) {
+			System.out.println(new Receipt(date, inputMap, sum(), str));
+		} else {
+			Receipt r = new Receipt(date, inputMap, sum(), str);
+			paymentMap.put(date, new Payment(date, r));
+		}
 	}
 	
 	public int sum() {
