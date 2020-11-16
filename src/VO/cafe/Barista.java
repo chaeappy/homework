@@ -1,6 +1,5 @@
 package vo.cafe;
 
-import java.util.HashMap;
 import java.util.Scanner;
 
 //1. 회원가입
@@ -22,8 +21,7 @@ public class Barista {
 
 	void run() {
 		while (true) {
-			mainMsg();
-			int input = sc.nextInt();
+			int input = mainMsg();
 			switch (input) {
 			case 1:
 				signUp();
@@ -41,11 +39,12 @@ public class Barista {
 		}
 	}
 
-	void mainMsg() {
+	int mainMsg() {
 		System.out.println(stars);
 		System.out.println("1. 회원등록");
 		System.out.println("2. 사원코드 인증");
 		System.out.println("0. 프로그램종료");
+		return sc.nextInt();
 	}
 
 	void signUp() {
@@ -167,26 +166,63 @@ public class Barista {
 
 	
 	void pay() {
-		System.out.println("1. 현금결제");
-		System.out.println("2. 카드결제");
-		int input = sc.nextInt();
+		int input = payMsg();
 		switch (input) {
 		case 1:
-			cash();
+			String phoneNum = cashMsg();
+			
+			if (phoneNum != null) {
+				p.pay(phoneNum, receipt());
+			} else {
+				p.pay(receipt());
+			}
 			break;
 		case 2:
 			card();
+			p.pay(receipt());
 			break;
 
 		default:
 			break;
 		}
-		p.pay(input);
 		
 	}
 	
-	void cash() {
-		
+	int payMsg() {
+		System.out.println("1. 현금결제");
+		System.out.println("2. 카드결제");
+		return sc.nextInt();
+	}
+	
+	String cashMsg() {
+		System.out.println("1. 현금영수증 발행");
+		System.out.println("2. 불필요");
+		int input = sc.nextInt();
+		if (input == 1) {
+			String phoneNum = cashReceiptMsg();
+			return phoneNum;
+		} else {
+			return null;
+		}
+	}
+	
+	
+	String cashReceiptMsg() {
+		System.out.print("핸드폰번호 : ");
+		sc.nextLine();
+		String phoneNum = sc.nextLine();
+		return phoneNum;
+	}
+	
+	boolean receipt() {
+		System.out.println("1. 영수증 발행");
+		System.out.println("2. 불필요");
+		int input = sc.nextInt();
+		if (input == 1) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	void card() {

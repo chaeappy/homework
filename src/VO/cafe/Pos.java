@@ -8,10 +8,11 @@ import java.util.Map.Entry;
 
 public class Pos {
 	DrinkDatabase ddb = new DrinkDatabase();
-	HashMap<Integer, Integer> inputMap = new HashMap<Integer, Integer>();
+	HashMap<Drink, Integer> inputMap = new HashMap<Drink, Integer>();
+//	HashMap<Integer, Integer> inputMap = new HashMap<Integer, Integer>();
 
 	// 메뉴보기
-	void menuMsg() {
+	public void menuMsg() {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		int i = 0;
 		try {
@@ -33,65 +34,63 @@ public class Pos {
 	}
 
 	// 포스 메뉴입력
-	void input(int[] drinkArr) {
+	public void input(int[] drinkArr) {
 		int num = drinkArr[0];
 		int howMany = drinkArr[1];
 		if (ddb.drinkMap.containsKey(num)) {
-			if (inputMap.containsKey(num)) {
-				int plus = inputMap.get(num);
-				inputMap.put(num, howMany + plus);
+			Drink drink = ddb.drinkMap.get(num);
+			if (inputMap.containsKey(drink)) {
+				int oldHowMany = inputMap.get(drink);
+				inputMap.put(drink, oldHowMany + howMany);
 			} else {
-				inputMap.put(num, howMany);
+				inputMap.put(drink, howMany);
 			}
 		} else {
 			System.out.println("입력실패");
 		}
 	}
 
-	void printInput() {
-		for (Entry<Integer, Integer> entry : inputMap.entrySet()) {
-			int num = entry.getKey();
+	public void printInput() {
+		for (Entry<Drink, Integer> entry : inputMap.entrySet()) {
+			Drink drink = entry.getKey();
 			int howMany = entry.getValue();
-			Drink drink = ddb.drinkMap.get(num);
-			String name = drink.name;
-			System.out.println(name + " " + howMany);
+			System.out.println(drink.name + " " + howMany);
 		}
 
 	}
 
 	// 포스 메뉴삭제
 	public void deleteInput(int num) {
-		for (Entry<Integer, Integer> entry : inputMap.entrySet()) {
-			if (num == entry.getKey()) {
-				inputMap.remove(num);
+		for (Entry<Drink, Integer> entry : inputMap.entrySet()) {
+			Drink drink = entry.getKey();
+			if (num == drink.num) {
+				inputMap.remove(drink);
 				return;
 			}
 		}
 	}
 	
-	void pay(int input) {
-		printInput();
-		String charge = "";
-		int total = sum();
-		if (input == 1) {
-			charge = "현금결제";
-		} else if (input == 2) {
-			charge = "카드결제";
-		}
-		System.out.println("Total : " + total + "원");
-		System.out.println(charge);
+	
+	
+	public void pay(String phoneNum, boolean receipt) {
+		
+	}
+		
+	public void pay(boolean receipt) {
 		
 	}
 	
-	int sum() {
+	public int sum() {
 		int sum = 0;
-		for (Entry<Integer, Integer> entry : inputMap.entrySet()) {
-			int num = entry.getKey();
+		for (Entry<Drink, Integer> entry : inputMap.entrySet()) {
+			Drink drink = entry.getKey();
 			int howMany = entry.getValue();
-			Drink drink = ddb.drinkMap.get(num);
 			sum += drink.price * howMany;
 		}
 		return sum;
+	}
+	
+	public void cashReceipt(String phoneNum) {
 	}
 
 }

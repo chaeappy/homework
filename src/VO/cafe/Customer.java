@@ -3,6 +3,8 @@ package vo.cafe;
 public class Customer {
 	String id;
 	int gender;
+	Receipt receipt;
+	
 	//결재내역 영수
 
 	public Customer(String id, int gender) {
@@ -10,6 +12,7 @@ public class Customer {
 		this.id = id;
 		this.gender = gender;
 	}
+	
 	
 
 	
