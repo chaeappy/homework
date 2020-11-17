@@ -1,6 +1,5 @@
 package vo.cafe;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -9,17 +8,21 @@ public class Receipt {
 	int sum;
 	String str;
 	String phoneNum;
-	Date date;
+	String pDate;
+	String rDate;
+	String stars = "*****************************************";
 	
-	public Receipt(Date date, HashMap<Drink, Integer> map, int sum, String str) {
-		this.date = date;
+	public Receipt(String pDate, String rDate, HashMap<Drink, Integer> map, int sum, String str) {
+		this.pDate = pDate;
+		this.rDate = rDate;
 		this.map = map;
 		this.sum = sum;
 		this.str = str;
 	}
 	
-	public Receipt(Date date, HashMap<Drink, Integer> map, int sum, String str, String phoneNum) {
-		this.date = date;
+	public Receipt(String pDate, String rDate, HashMap<Drink, Integer> map, int sum, String str, String phoneNum) {
+		this.pDate = pDate;
+		this.rDate = rDate;
 		this.map = map;
 		this.sum = sum;
 		this.str = str;
@@ -35,7 +38,7 @@ public class Receipt {
 			int howMany = entry.getValue();
 			msg += drink.name + " " + howMany + "\n";
 		}
-		return "Receipt : " + date + "\n" + msg + sum + "원" + " [ "+ str +"결제 ] ";
+		return "[ Receipt : " + pDate + " ] \n" + rDate + "\n" + stars + "\n" + msg + sum + "원" + " [ "+ str +"결제 ] ";
 	}
 
 	

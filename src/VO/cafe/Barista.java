@@ -79,8 +79,9 @@ public class Barista {
 			case 1:
 				// 주문
 				order(c);
-				break;
+				return;
 			case 2:
+				cancelPayment();
 				// 결재취소
 				break;
 			case 3:
@@ -127,7 +128,7 @@ public class Barista {
 			// 결제
 			case 4:
 				pay(c);
-				break;
+				return;
 
 			default:
 				break;
@@ -137,6 +138,10 @@ public class Barista {
 //			p.input(drinkArr);
 		}
 
+	}
+	
+	void cancelPayment() {
+		
 	}
 	
 	int orderMsg() {
