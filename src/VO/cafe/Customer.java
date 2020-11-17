@@ -2,15 +2,12 @@ package vo.cafe;
 
 public class Customer {
 	String id;
-	int gender;
 	Receipt receipt;
 	
-	//결재내역 영수
+	//결재내역 영수증
 
-	public Customer(String id, int gender) {
-		super();
+	public Customer(String id) {
 		this.id = id;
-		this.gender = gender;
 	}
 	
 	

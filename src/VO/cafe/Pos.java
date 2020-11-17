@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 public class Pos {
-	DrinkDatabase ddb = new DrinkDatabase();
+	CafeDatabase db = new CafeDatabase();
 	HashMap<Drink, Integer> inputMap = new HashMap<Drink, Integer>();
 	HashMap<String, Payment> paymentMap = new HashMap<String, Payment>();
 	Date date = new Date();
@@ -18,12 +18,30 @@ public class Pos {
 	SimpleDateFormat payment = new SimpleDateFormat("yyyyMMddHHmmss");
 	String pDate = payment.format(date);
 
+	// 회원관리 (회원등록 / 회원코드인증)
+	boolean signUp(String id) {
+		if (db.customerMap.containsKey(id)) {
+			return false;
+		} else {
+			db.customerMap.put(id, new Customer(id));
+			return true;
+		}
+	}
+	
+	Customer login(String id) {
+		if (db.customerMap.containsKey(id)) {
+			Customer c = db.customerMap.get(id);
+			return c;
+		}
+		return null; 
+	}
+
 	// 메뉴보기
 	public void menuMsg() {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		int i = 0;
 		try {
-			for (Entry<Integer, Drink> entry : ddb.drinkMap.entrySet()) {
+			for (Entry<Integer, Drink> entry : db.drinkMap.entrySet()) {
 				Drink drink = entry.getValue();
 				bw.write(drink + "");
 				++i;
@@ -44,8 +62,8 @@ public class Pos {
 	public void input(int[] drinkArr) {
 		int num = drinkArr[0];
 		int howMany = drinkArr[1];
-		if (ddb.drinkMap.containsKey(num)) {
-			Drink drink = ddb.drinkMap.get(num);
+		if (db.drinkMap.containsKey(num)) {
+			Drink drink = db.drinkMap.get(num);
 			if (inputMap.containsKey(drink)) {
 				int oldHowMany = inputMap.get(drink);
 				inputMap.put(drink, oldHowMany + howMany);
@@ -91,6 +109,10 @@ public class Pos {
 		if (receipt) {
 			printReceipt(r);
 		}
+	}
+
+	void clear() {
+		inputMap.clear();
 	}
 
 	public int sum() {

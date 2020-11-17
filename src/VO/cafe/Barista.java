@@ -10,10 +10,10 @@ import java.util.Scanner;
 //6. 총 매출
 //등등
 public class Barista {
-	Cafe cafe = new Cafe();
+	CafeDatabase cafe = new CafeDatabase();
 	Pos p = new Pos();
 	Scanner sc = new Scanner(System.in);
-	String stars = "*****************************************";
+	String stars = "****************************";
 	// 회원등록
 	// 사원코드 인증
 	// 메뉴선택
@@ -31,8 +31,7 @@ public class Barista {
 				break;
 			case 0:
 				// 프로그램 종료
-				break;
-
+				return;
 			default:
 				break;
 			}
@@ -48,18 +47,13 @@ public class Barista {
 	}
 
 	void signUp() {
-		System.out.println(stars);
 		System.out.print("아이디 : ");
 		sc.nextLine();
 		String id = sc.nextLine();
-		System.out.println("성별 1. 남자 / 2. 여자");
-		int gender = sc.nextInt();
-		if (gender == 1 || gender == 2) {
-			if (cafe.signUp(id, gender)) {
-				System.out.println("회원가입 성공");
-			}
+		if (p.signUp(id)) {
+			System.out.println(id + " 회원가입 성공");
 		} else {
-			return;
+			System.out.println("회원가입 실패");
 		}
 	}
 
@@ -68,7 +62,7 @@ public class Barista {
 		System.out.print("아이디 : ");
 		sc.nextLine();
 		String id = sc.nextLine();
-		Customer c = cafe.login(id);
+		Customer c = p.login(id);
 		work(c);
 	}
 
@@ -78,6 +72,7 @@ public class Barista {
 			switch (input) {
 			case 1:
 				// 주문
+				clear();
 				order(c);
 				return;
 			case 2:
@@ -106,6 +101,10 @@ public class Barista {
 		System.out.println("3. 영수증재발행");
 		return sc.nextInt();
 	}
+	
+	void clear() {
+		p.clear();
+	}
 
 	void order(Customer c) {
 		while (true) {
@@ -129,7 +128,6 @@ public class Barista {
 			case 4:
 				pay(c);
 				return;
-
 			default:
 				break;
 			
@@ -139,6 +137,8 @@ public class Barista {
 		}
 
 	}
+	
+	
 	
 	void cancelPayment() {
 		

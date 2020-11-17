@@ -10,8 +10,7 @@ public class Receipt {
 	String phoneNum;
 	String pDate;
 	String rDate;
-	String stars = "*****************************************";
-	
+	String line = "============================";
 	public Receipt(String pDate, String rDate, HashMap<Drink, Integer> map, int sum, String str) {
 		this.pDate = pDate;
 		this.rDate = rDate;
@@ -38,7 +37,7 @@ public class Receipt {
 			int howMany = entry.getValue();
 			msg += drink.name + " " + howMany + "\n";
 		}
-		return "[ Receipt : " + pDate + " ] \n" + rDate + "\n" + stars + "\n" + msg + sum + "원" + " [ "+ str +"결제 ] ";
+		return "[ Receipt : " + pDate + " ] \n" + rDate + "\n" + line + "\n" + msg + "[ "+ str +"결제 ] Total : " + sum + "원";
 	}
 
 	
