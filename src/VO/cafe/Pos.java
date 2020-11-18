@@ -19,21 +19,29 @@ public class Pos {
 	String pDate = payment.format(date);
 
 	// 회원관리 (회원등록 / 회원코드인증)
-	boolean signUp(String id) {
-		if (db.customerMap.containsKey(id)) {
-			return false;
-		} else {
-			db.customerMap.put(id, new Customer(id));
+	boolean signUp(String eMail, String passWord) {
+		if (db.customerMap.containsKey(eMail)) {
 			return true;
+		} else {
+			db.customerMap.put(eMail, new Customer(eMail, passWord));
+			return false;
 		}
 	}
 	
-	Customer login(String id) {
-		if (db.customerMap.containsKey(id)) {
-			Customer c = db.customerMap.get(id);
-			return c;
+	Customer login(String eMail, String passWord) {
+		System.out.println("1");
+		if (db.customerMap.containsKey(eMail)) {
+			System.out.println("2");
+			Customer c = db.customerMap.get(eMail);
+			System.out.println(c.passWord);
+			if (passWord == c.passWord) {
+				System.out.println(eMail);
+				System.out.println("3");
+				return c;
+			}
+			System.out.println("4");
 		}
-		return null; 
+			return null; 
 	}
 
 	// 메뉴보기

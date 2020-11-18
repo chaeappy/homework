@@ -36,7 +36,14 @@ public class CafeDatabase {
 				System.out.println("DB 접속 성공");
 				stmt = connection.createStatement();
 				drinkRs = stmt.executeQuery("select * from drink;");
-				customerRs = stmt.executeQuery("");
+				customerRs = stmt.executeQuery("select * from customer;");
+				
+				while (customerRs.next()) {
+					String eMail = customerRs.getString("EMAIL");
+					String passWord = customerRs.getString("PASSWORD");
+					customerMap.put(eMail, new Customer(eMail, passWord));
+				}
+				
 				while(drinkRs.next()) {
 					int num = drinkRs.getInt("NUM");
 					String name = drinkRs.getString("NAME");

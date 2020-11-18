@@ -10,7 +10,6 @@ import java.util.Scanner;
 //6. 총 매출
 //등등
 public class Barista {
-	CafeDatabase cafe = new CafeDatabase();
 	Pos p = new Pos();
 	Scanner sc = new Scanner(System.in);
 	String stars = "****************************";
@@ -21,7 +20,7 @@ public class Barista {
 
 	void run() {
 		while (true) {
-			int input = mainMsg();
+			int input = runMsg();
 			switch (input) {
 			case 1:
 				signUp();
@@ -37,33 +36,61 @@ public class Barista {
 			}
 		}
 	}
-
-	int mainMsg() {
+	
+		
+	int runMsg() {
 		System.out.println(stars);
 		System.out.println("1. 회원등록");
 		System.out.println("2. 사원코드 인증");
 		System.out.println("0. 프로그램종료");
 		return sc.nextInt();
 	}
-
+	
 	void signUp() {
-		System.out.print("아이디 : ");
-		sc.nextLine();
-		String id = sc.nextLine();
-		if (p.signUp(id)) {
-			System.out.println(id + " 회원가입 성공");
-		} else {
+		String[] signArr = signUpMsg();
+		String eMail = signArr[0];
+		String passWord = signArr[1];
+		if (p.signUp(eMail, passWord)) {
 			System.out.println("회원가입 실패");
+		} else {
+			System.out.println("회원가입 성공");
 		}
 	}
 
-	void logIn() {
-		System.out.println(stars);
-		System.out.print("아이디 : ");
+	String[] signUpMsg() {
+		String[] signArr = new String[2];
+		System.out.print("이메일주소 : ");
 		sc.nextLine();
-		String id = sc.nextLine();
-		Customer c = p.login(id);
-		work(c);
+		signArr[0]= sc.nextLine();
+		System.out.println("비밀번호 : ");
+		sc.nextLine();
+		signArr[1] = sc.nextLine();
+		return signArr;
+	}
+	
+
+	void logIn() {
+		String[] logInArr = logInMsg();
+		String eMail = logInArr[0];
+		String passWord = logInArr[1];
+		Customer c = p.login(eMail, passWord);
+		if (c != null) {
+			work(c);
+		} else {
+			System.out.println("로그인 실패");
+		}
+	}
+	
+	String[] logInMsg() {
+		String[] logInArr = new String[2];
+		System.out.println(stars);
+		System.out.println("이메일주소 ex) ******@gmail.com");
+		System.out.print(" >>");
+		sc.nextLine();
+		logInArr[0] = sc.nextLine();
+		System.out.print("패스워드 : ");
+		logInArr[1] = sc.nextLine();
+		return logInArr;
 	}
 
 	void work(Customer c) {
