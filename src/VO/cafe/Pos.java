@@ -10,10 +10,11 @@ import java.util.Map.Entry;
 
 public class Pos {
 	CafeDatabase db = new CafeDatabase();
+	Sales s = new Sales();
 	HashMap<Drink, Integer> inputMap = new HashMap<Drink, Integer>();
-	HashMap<String, Payment> paymentMap = new HashMap<String, Payment>();
-	Date date = new Date();
+	HashMap<String, Receipt> salesMap = new HashMap<String, Receipt>();
 	SimpleDateFormat receipt = new SimpleDateFormat("yyyy년MM월dd일_HH시mm분ss초");
+	Date date = new Date();
 	String rDate = receipt.format(date);
 	SimpleDateFormat payment = new SimpleDateFormat("yyyyMMddHHmmss");
 	String pDate = payment.format(date);
@@ -100,7 +101,7 @@ public class Pos {
 
 	public void pay(Customer c, String str, String phoneNum, boolean receipt) {
 		Receipt r = new Receipt(pDate, rDate, inputMap, sum(), str, phoneNum);
-		paymentMap.put(pDate, new Payment(pDate, r));
+		salesMap.put(pDate, r);
 		if (receipt) {
 			printReceipt(r);
 		}
@@ -108,7 +109,7 @@ public class Pos {
 
 	public void pay(Customer c, String str, boolean receipt) {
 		Receipt r = new Receipt(pDate, rDate, inputMap, sum(), str);
-		paymentMap.put(pDate, new Payment(pDate, r));
+		salesMap.put(pDate, r);
 		if (receipt) {
 			printReceipt(r);
 		}
@@ -133,6 +134,11 @@ public class Pos {
 	}
 
 	public void cashReceipt(String phoneNum) {
+	}
+	
+	// 매출확인
+	void sales(String date) {
+		s.check(date, salesMap);
 	}
 
 }

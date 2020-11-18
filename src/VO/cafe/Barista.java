@@ -28,6 +28,9 @@ public class Barista {
 			case 2:
 				logIn();
 				break;
+			case 3:
+				sales();
+				break;
 			case 0:
 				// 프로그램 종료
 				return;
@@ -42,6 +45,7 @@ public class Barista {
 		System.out.println(stars);
 		System.out.println("1. 회원등록");
 		System.out.println("2. 사원코드 인증");
+		System.out.println("3. 매출확인");
 		System.out.println("0. 프로그램종료");
 		return sc.nextInt();
 	}
@@ -164,7 +168,17 @@ public class Barista {
 		}
 
 	}
+	void sales() {
+		String date = salesMsg();
+		p.sales(date);
+	}
 	
+	String salesMsg() {
+		System.out.println("조회할 날짜를 입력하세요 ex) 20201118");
+		sc.nextLine();
+		return sc.nextLine();
+		
+	}
 	
 	
 	void cancelPayment() {
