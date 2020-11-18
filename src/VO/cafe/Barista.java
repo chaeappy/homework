@@ -51,7 +51,7 @@ public class Barista {
 		String eMail = signArr[0];
 		String passWord = signArr[1];
 		if (p.signUp(eMail, passWord)) {
-			System.out.println("회원가입 실패");
+			System.out.println("아이디 중복");
 		} else {
 			System.out.println("회원가입 성공");
 		}
@@ -77,7 +77,7 @@ public class Barista {
 		if (c != null) {
 			work(c);
 		} else {
-			System.out.println("로그인 실패");
+			System.out.println("이메일 혹은 패스워드 오류");
 		}
 	}
 	
