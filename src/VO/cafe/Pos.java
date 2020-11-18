@@ -29,17 +29,12 @@ public class Pos {
 	}
 	
 	Customer login(String eMail, String passWord) {
-		System.out.println("1");
 		if (db.customerMap.containsKey(eMail)) {
-			System.out.println("2");
 			Customer c = db.customerMap.get(eMail);
-			System.out.println(c.passWord);
-			if (passWord == c.passWord) {
+			if (passWord.equals(c.passWord)) {
 				System.out.println(eMail);
-				System.out.println("3");
 				return c;
 			}
-			System.out.println("4");
 		}
 			return null; 
 	}
